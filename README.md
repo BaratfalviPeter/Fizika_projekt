@@ -1,6 +1,6 @@
 # Fizika_projekt
 
-Expo React Native app magnetometer mereshez.
+Expo React Native app magnetometer mereshez (JavaScript alapon).
 
 ## Funkciok
 

@@ -14,30 +14,19 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import Svg, { Polyline } from 'react-native-svg';
 
-type Vector3 = {
-  x: number;
-  y: number;
-  z: number;
-};
-
-type Sample = Vector3 & {
-  t: number;
-  m: number;
-};
-
 const UPDATE_INTERVAL_MS = 100;
 const MAX_SAMPLES = 240;
 const CALIBRATION_MS = 8000;
 
-function format(value: number): string {
+function format(value) {
   return value.toFixed(2);
 }
 
-function magnitude(v: Vector3): number {
+function magnitude(v) {
   return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-function toPoints(data: number[], width: number, height: number): string {
+function toPoints(data, width, height) {
   if (data.length < 2) {
     return `0,${height / 2} ${width},${height / 2}`;
   }
@@ -57,9 +46,9 @@ function toPoints(data: number[], width: number, height: number): string {
 }
 
 export default function App() {
-  const [raw, setRaw] = useState<Vector3>({ x: 0, y: 0, z: 0 });
-  const [offset, setOffset] = useState<Vector3>({ x: 0, y: 0, z: 0 });
-  const [samples, setSamples] = useState<Sample[]>([]);
+  const [raw, setRaw] = useState({ x: 0, y: 0, z: 0 });
+  const [offset, setOffset] = useState({ x: 0, y: 0, z: 0 });
+  const [samples, setSamples] = useState([]);
   const [isCalibrating, setIsCalibrating] = useState(false);
 
   useEffect(() => {
@@ -84,7 +73,7 @@ export default function App() {
   const totalB = useMemo(() => magnitude(corrected), [corrected]);
 
   useEffect(() => {
-    const point: Sample = {
+    const point = {
       ...corrected,
       m: totalB,
       t: Date.now(),
@@ -106,10 +95,10 @@ export default function App() {
 
     setIsCalibrating(true);
 
-    const minVals: Vector3 = { x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY, z: Number.POSITIVE_INFINITY };
-    const maxVals: Vector3 = { x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY, z: Number.NEGATIVE_INFINITY };
+    const minVals = { x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY, z: Number.POSITIVE_INFINITY };
+    const maxVals = { x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY, z: Number.NEGATIVE_INFINITY };
 
-    const tempSamples: Vector3[] = [];
+    const tempSamples = [];
     const tempSub = Magnetometer.addListener((next) => {
       tempSamples.push(next);
       minVals.x = Math.min(minVals.x, next.x);
